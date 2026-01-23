@@ -20,7 +20,7 @@ library(tidyverse)
 library(stargazer)
 
 # 3. Load data
-dta <- read.csv("data/raw/dec25pub.csv")
+dta <- read.csv(unz("data/raw/dec25pub.zip", "dec25pub.csv"))
 nrow(dta) # May be useful to work with subsample in first contact with data
 View(head(dta))
 
