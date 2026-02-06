@@ -1,0 +1,12 @@
+	(1)	(2)
+VARIABLES	lprice	lprice
+		
+ldist	0.317***	0.365***
+	(0.0500)	(0.0658)
+Constant	8.058***	8.047***
+	(0.494)	(0.646)
+		
+Observations	179	142
+R-squared	0.184	0.180
+Standard errors in parentheses		
+*** p<0.01, ** p<0.05, * p<0.1		
