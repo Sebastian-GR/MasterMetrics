@@ -1,0 +1,82 @@
+<<dd_version: 2>>
+
+# Class Feb27th
+
+
+## Exercise 4.1
+
+We import the data:
+
+~~~~
+<<dd_do:>>
+clear all
+bcuse vote1
+<</dd_do>>
+~~~~
+
+Perform the regression:
+
+~~~~
+<<dd_do:>>
+reg voteA lexpendA lexpendB prtystrA
+<</dd_do>>
+~~~~
+
+Can perform the test as a wald test:
+
+~~~~
+<<dd_do:>>
+test _b[lexpendA] + _b[lexpendB] = 0
+<</dd_do>>
+~~~~
+
+
+
+Or reexpress model:
+
+~~~~
+<<dd_do:>>
+gen aux = lexpendA - lexpendB 
+reg voteA aux lexpendB prtystrA
+<</dd_do>>
+~~~~
+
+## Exercise 4.3
+
+We regress on surface and bedrooms
+
+~~~~
+<<dd_do:>>
+clear all
+bcuse hprice1
+reg lprice sqrft bdrms
+<</dd_do>>
+~~~~	
+
+Again, we can do a Wald test:
+
+~~~~
+<<dd_do:>>
+test _b[sqrft] * 150 + _b[bdrms] = 0
+<</dd_do>>
+~~~~	
+
+Or, what we are actually being requested, using an auxiliary variable.
+
+~~~~
+<<dd_do:>>
+gen aux = sqrft - 150 * bdrms
+reg lprice aux bdrms
+<</dd_do>>
+~~~~	
+
+
+Note that these documents are actually flexible. For example, you can also do plots or processings without showing the
+<<dd_do: quietly>>
+scatter (lprice sqrft)
+<</dd_do>>
+
+<<dd_graph: saving("scatter_for_class.png") replace height(400)>>
+
+
+
