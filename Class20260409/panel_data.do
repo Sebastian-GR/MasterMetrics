@@ -10,7 +10,7 @@ foreach var in `x' {
 
 * POLS
 reg `y' `x'
-* FDE
+* FD
 reg `y' D_season D_spring D_sat D_hsperc D_female D_black D_white D_frstsem ///
  D_tothrs D_crsgpa 
 * FE
