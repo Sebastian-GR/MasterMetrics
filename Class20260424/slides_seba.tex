@@ -1,0 +1,474 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{seahorse}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{amsmath, amssymb}
+\usepackage{array}
+\usepackage{hyperref}
+\AtBeginSection[]{
+    \begin{frame}[plain]
+        \centering
+        \vfill
+        {\Huge\bfseries\insertsectionhead}
+        \vfill
+    \end{frame}
+}
+
+\AtBeginSubsection[]{
+    \begin{frame}[plain]
+        \centering
+        \vfill
+        {\Huge\bfseries\insertsubsectionhead}
+        \vfill
+    \end{frame}
+}
+
+\title[EC508 Map]{EC508 Econometrics: Integrated Course Map}
+\subtitle{From MLR Foundations to IV, Panel, and Time Series}
+\author{Class Summary from slides\_andre}
+\date{April 2026}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+
+\section{Recap}
+
+\begin{frame}{Basic MLR Recap (Wooldridge)}
+Model:
+\[
+y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_k x_{ik} + u_i
+\]
+Key assumptions:
+\begin{itemize}
+	\item MLR.1 Linearity in parameters
+	\item MLR.2 Random sampling
+	\item MLR.3 No perfect collinearity
+	\item MLR.4 Zero conditional mean: $E(u_i\mid X_i)=0$
+	\item MLR.5 Homoskedasticity (for usual SE formulas)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why does it matter}
+\begin{itemize}
+	\item MLR.1--MLR.4 hold: unbiased/consistent
+	\item MLR.5 also holds: efficient
+	\item If normality is added: exact small-sample $t$ and $F$ inference
+\end{itemize}
+\vspace{0.3cm}
+Typical failure map:
+\begin{itemize}
+	\item Break MLR.4 $\Rightarrow$ bias/inconsistency (endogeneity)
+	\item Break MLR.5 $\Rightarrow$ wrong classical SE/tests, inefficiency
+\end{itemize}
+\end{frame}
+
+\section{1. Heteroskedasticity}
+
+\begin{frame}{Unit 1: Heteroskedasticity --- What Changes?}
+\[
+\mathrm{Var}(u_i\mid X_i)=\sigma^2 \quad \text{(homoskedasticity)}
+\]
+Changed setting:
+\[
+\mathrm{Var}(u_i\mid X_i)=\sigma_i^2
+\]
+\begin{itemize}
+	\item Unbiased/consistent (if zero conditional mean holds)
+	\item Lose efficiency (no longer BLUE)
+	\item Lose inference: usual (non-robust) SE, $t$, $F$, confidence intervals are unreliable
+\end{itemize}
+\begin{block}{Inference fix}
+Use heteroskedasticity-robust (Huber-White) standard errors for valid large-sample inference.
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Robust Standard Errors}
+\begin{itemize}
+	\item Consistent under unknown heteroskedasticity forms
+	\item $\hat \beta$ unchanged; only estimated uncertainty changes
+	\item Robust SE can be larger or smaller; often larger in practice
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Testing}
+\begin{itemize}
+	\item Breusch-Pagan (linear variance function idea)
+	\item White test (more general nonlinear form using squares/interactions)
+\end{itemize}
+Logic:
+\begin{itemize}
+	\item Regress $\hat u_i^2$ on functions of regressors
+	\item Significant explanatory power in this auxiliary regression suggests heteroskedasticity
+\end{itemize}
+\end{frame}
+
+\begin{frame}{WLS/GLS}
+If variance form is known, weight:
+\[
+\mathrm{Var}(u_i\mid X_i)=\sigma^2 h_i
+\]
+Use weighted least squares:
+\begin{itemize}
+	\item Lower weight to high-variance observations
+	\item Efficiency relative to OLS
+	\item Bad variance specification can hurt
+\end{itemize}
+\end{frame}
+
+\section{2. Data and Specification Issues}
+
+\begin{frame}{Other issues}
+\begin{itemize}
+	\item Functional form misspecification
+	\item Proxy variables
+	\item Measurement error (in $y$ vs in $x$)
+	\item Missing data and outliers
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Functional Form}
+\begin{itemize}
+	\item RESET test
+	\item Non-nested comparisons
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Proxy Variables}
+\begin{itemize}
+	\item If error is simply random, you are good
+	\item If not perfect, usually at least better
+	\item In exam, decompose the variable into the proxy and the error
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Missing Data and Selection}
+Cases:
+\begin{itemize}
+	\item Missing at random: no bias, less precision
+	\item Missing based on $Y$ or unobservables: sample selection bias
+	\item (In class: draw how can induce attenuation using scatter deleting high income people.)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Outliers and Influence}
+\begin{itemize}
+	\item OLS \textbf{squares} residuals, extreme points have large effect
+	\item Report robustness unless a clear data error justifies exclusion
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Units 1 and 2 Takeaway}
+\begin{itemize}
+    \item From heteroskedasticity: what breaks, how we solve
+    \item From specification/data issues: present more problems that can threaten consistency besides the already known omitted variable approach
+\end{itemize}
+\end{frame}
+
+\section{3. Time Series}
+
+\begin{frame}{Time Series vs Cross Section}
+\begin{itemize}
+	\item Ordering matters
+	\item Can have seasonality and trends
+	\item Random sampling hardly holds
+	\item Lag structure, stationarity, trends, and serial dependence
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamics, interpretation and long-run effects}
+Static model:
+\[
+y_t = \beta_0 + \beta_1 x_t + u_t
+\]
+Finite distributed lag (FDL):
+\[
+y_t = \delta_0 + \delta_1 x_t + \delta_2 x_{t-1} + \cdots + u_t
+\]
+\end{frame}
+
+\begin{frame}{Assumptions: Time Series}
+Class assumptions TS.1--TS.5:
+\begin{itemize}
+	\item TS.1 Linearity in parameters
+	\item TS.2 No perfect collinearity
+	\item TS.3 Strict exogeneity: $E(u_t\mid X)=0$ (not $X_t$!) for all $t$
+	\item TS.4 Homoskedasticity
+	\item TS.5 No serial correlation in errors
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What's new}
+\begin{itemize}
+    \item Endogeneity is a stronger condition
+	\item OLS may remain unbiased under TS.1--TS.3
+	\item But efficiency and classical inference rely on TS.4--TS.5
+\end{itemize}
+\end{frame}
+
+\section{4. Time Series and Forecasting}
+
+\begin{frame}{Autocorrelation and AR Models}
+AR(1):
+\[
+y_t = \beta_0 + \beta_1 y_{t-1} + u_t
+\]
+AR($p$): $p$ lags.
+\begin{itemize}
+	\item Prediction vs. causality
+	\item Lag choice on information criteria (AIC/BIC)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ADL Models and Granger Causality}
+ADL combines lags of $y$ and predictors $x$:
+\[
+y_t = \beta_0 + \sum_{j=1}^p \beta_j y_{t-j} + \sum_{m=1}^r \delta_m x_{t-m} + u_t
+\]
+Granger causality test: (regretted calling it causality)
+\begin{itemize}
+	\item Lagged $x$ predicts $y$?
+	\item Predictive, not causal
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Forecasting and Uncertainty}
+\begin{itemize}
+	\item Forecast error (out-of-sample vs in-sample)
+	\item RMSE/RMSFE quantifies typical forecast mistake
+	\item Build forecast intervals using variance of errors
+	\item In-sample approximation
+	\item Pseudo out-of-sample rolling/recursive evaluation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Non-Stationarity and Unit Roots}
+Random walk with drift:
+\[
+y_t = \beta_0 + y_{t-1} + u_t
+\]
+Implication:
+\begin{itemize}
+	\item Stochastic trend, nonstationary
+	\item Regressions in levels can be spurious
+	\item Dickey-Fuller test for unit root
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Unit Roots}
+\begin{itemize}
+	\item Standard asymptotics fail
+	\item DF/ADF test: $$\Delta y_t = \alpha_0 + \alpha_1 y_{t-1} + \sum_{j=1}^p \gamma_j \Delta y_{t-j} + v_t$$
+    \item If $\alpha_1=0$: unit root, nonstationary. Need alternative critical values
+	\item Differences are stationary (if $I(1)$): $\Delta y_t$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Takeaway}
+\begin{block}{Where this fits}
+    New data structure. Problems with sampling and spurious regressions. 
+\end{block}
+\end{frame}
+
+\section{5. Panel Data}
+
+\begin{frame}{Data}
+    \begin{itemize}
+        \item Repeated cross-section and panel data
+        \item DGP: \[
+y_{it}=\beta_0+\beta_1 x_{it}+v_{it}, \; v_{it}=a_i+u_{it}
+\]
+        \item POLS: $\mathrm{Cov}(x_{it},a_i)=0$ and $\mathrm{Cov}(x_{it},u_{it})=0$ for all $t$ (if $a_i$ correlated with $x_{it}$, OVB)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{First Difference (FD) Estimator}
+Two-period illustration:
+\[
+\Delta y_i = \delta_0 + \beta_1 \Delta x_i + \Delta u_i
+\]
+What changes:
+\begin{itemize}
+	\item Differencing removes $a_i$ exactly
+	\item $x_i$ must vary
+	\item $\Delta u_i$ uncorrelated with $\Delta x_i$
+	\item For usual inference: homoskedastic/no problematic serial dependence in differenced errors
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fixed Effects (FE / Within) Estimator}
+Within transformation:
+\[
+y_{it}-\bar y_i = \beta_1(x_{it}-\bar x_i) + (u_{it}-\bar u_i)
+\]
+\begin{itemize}
+	\item Removes all time-invariant unobservables $a_i$
+	\item Strict exogeneity: $\mathrm{Cov}(x_{it},u_{is})=0$ for all $t,s$
+	\item No need for $\mathrm{Cov}(a_i,x_{it})=0$
+	\item Equivalent to FD if only two periods but can be more efficient with $T>2$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Random Effects (RE) Estimator}
+RE keeps $a_i$ in composite error but assumes orthogonality:
+\[
+\mathrm{Cov}(a_i,x_{it})=0
+\]
+\begin{itemize}
+	\item Bias variance tradeoff: pay the price of this assumption, get higher efficiency
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Panel Assumptions}
+\small
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+Estimator & Assumption & Solves $a_i$--$x$ corr. & Time-invariant $x$ \\
+\midrule
+POLS & $\mathrm{Cov}(x_{it},a_i)=0$ & No & Yes \\
+FD & $\mathrm{Cov}(\Delta x_{it},\Delta u_{it})=0$ & Yes & No \\
+FE & $\mathrm{Cov}(x_{it},u_{is})=0\;\forall t,s$ & Yes & No \\
+RE & $\mathrm{Cov}(x_{it},a_i)=0$ & No & Yes \\
+\bottomrule
+\end{tabular}
+\end{center}
+\normalsize
+\end{frame}
+
+\begin{frame}{DiD Logic}
+Two-period treatment effect representation:
+\[
+\hat\beta_{DiD} = \Delta \bar y_{treat} - \Delta \bar y_{control}
+\]
+\end{frame}
+
+\begin{frame}{}
+\begin{block}{Where this fits}
+Panel methods solve unobserved heterogeneity. Sometimes sacrifice non-time-varying regressors.
+\begin{itemize}
+	\item If $a_i$ likely correlated with regressors: FE/FD
+	\item If orthogonality plausible and time-invariant regressors matter: RE
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{6. Instrumental Variables}
+
+\begin{frame}{Unit 6: The Endogeneity Problem}
+Structural equation:
+\[
+y = \beta_0 + \beta_1 x + u, \quad \mathrm{Cov}(x,u)\neq 0
+\]
+\begin{itemize}
+	\item Endogeneity (e.g., OVB), biased and inconsistent
+	\item Instrument $z$:
+\begin{itemize}
+	\item Exogeneity (not testable): $\mathrm{Cov}(z,u)=0$
+	\item Relevance (testable): $\mathrm{Cov}(z,x)\neq 0$
+\end{itemize}
+\end{itemize}
+$$ \hat \beta = (Z'X)^{-1}Z'y $$ consistent if $z$ is valid
+\end{frame}
+
+
+\begin{frame}{2SLS Workflow}
+1st Stage:
+\[
+x = \pi_0 + \pi_1 z + \pi_2 w + v
+\]
+2nd Stage:
+\[
+y = \beta_0 + \beta_1 \hat x + \beta_2 w + e
+\]
+Key note:
+\begin{itemize}
+	\item Correct 2SLS standard errors are required
+	\item Equivalent to previous one if one instrument, one endogenous
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Changes}
+\begin{itemize}
+	\item Consistent, not efficient
+	\item Weak instruments can create severe finite-sample problems
+\end{itemize}
+\end{frame}
+
+\begin{frame}{IV with Multiple Instruments}
+Benefits:
+\begin{itemize}
+	\item More first-stage predictive power can improve precision
+	\item Enables overidentification checks when more instruments than endogenous regressors
+	\item Endogeneity tests (OLS vs IV logic)
+	\item Overidentifying restriction tests (joint instrument exogeneity assumptions)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Takeaway}
+\begin{block}{Where this fits}
+If endogeneity, IV can solve by ``taking exogeneity'' from another variable.
+\end{block}
+\end{frame}
+
+\section{7. Simultaneous Equations}
+
+\begin{frame}{Simultaneity as Endogeneity}
+Example system:
+\[
+y_1 = \alpha_1 y_2 + \beta_1 z_1 + u_1,\qquad
+y_2 = \alpha_2 y_1 + \beta_2 z_2 + u_2
+\]
+What changes:
+\begin{itemize}
+	\item Endogenous are jointly determined: regressor in each equation contains part of structural error from the other equation
+    \item OLS inconsistent
+    \item Need excluded exogenous shifters to identify each structural equation
+	\item Order condition (necessary): more excluded exogenous variables than those endogenous (both equations above are identified)
+	\item Rank condition (necessary and sufficient): excluded variables shift endogenous regressor in that equation
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Connection to IV}
+\begin{itemize}
+	\item Each structural equation with endogenous RHS variable can be estimated by 2SLS if identified
+	\item Instruments come from exogenous variables excluded from that equation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Unit 7 Takeaway}
+\begin{block}{Where this fits}
+SEM formalizes equilibrium/reverse-causality environments and shows why identification design is central before estimation.
+\end{block}
+\end{frame}
+
+\section{Review}
+
+\begin{frame}{Covered}
+\begin{enumerate}
+	\item Stop assuming homoskedasticity
+	\item Explore additional ways to break MLR.4 (endogeneity)
+	\item New data type: time series
+	\item New data type: panel data
+	\item A solution to endogeneity: instrumental variables
+	\item Simultaneous equations
+\end{enumerate}
+\end{frame}
+
+
+\end{document}
